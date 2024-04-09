@@ -1,4 +1,3 @@
-import Post from "../modules/Post.js";
 import PostShema from "../modules/Post.js";
 
 
@@ -111,7 +110,7 @@ export const update = async (req, res) => {
       const deleteDoc = await PostShema.findByIdAndDelete(postId);
       if (!deleteDoc) {
         return res.status(404).json({
-          message: "Статья не найдена.",
+          message: "Article not found.",
         });
       }
   

@@ -1,4 +1,5 @@
 import express from "express";
+import dotenv from 'dotenv';
 import mongoose from "mongoose";
 import multer from "multer";
 import cors from 'cors';
@@ -8,7 +9,10 @@ import { create, getAll, getLastTags, getOne, getPopular, getSelectedTags, remov
 import {validationErrors, checkAuth} from "./utils/index.js";
 import app from "./server.js";
 
-mongoose.connect("mongodb+srv://euricalex:eociBuxqxpNqfMVs@my-first-cluster.vhjuxty.mongodb.net/blog")
+dotenv.config();
+const URL = process.env.URL;
+
+mongoose.connect(URL)
   .then(() => console.log("DB ok"))
   .catch((err) => console.log("DB error", err));
 
