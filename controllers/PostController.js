@@ -31,15 +31,7 @@ export const getLastTags = async(req, res) => {
   }
 }
 
-export const getSelectedTags = async(req, res) => {
-  try {
-    const { tag } = req.params; // Получаем значение параметра tag из URL
-const selectedTags = await PostShema.find({tags: tag}).populate('user').exec();
-res.json(selectedTags)
-  } catch(error) {
-    res.status(500).json({ message: error.message });
-  }
-}
+
 
 export const getOne = async (req, res) => {
   try {

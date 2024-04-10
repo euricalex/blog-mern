@@ -5,7 +5,7 @@ import multer from "multer";
 import cors from 'cors';
 import { registerValidation, loginValidation, postCreateValidation } from "./validation.js";
 import { getMe, login, register } from "./controllers/UserController.js";
-import { create, getAll, getLastTags, getOne, getPopular, getSelectedTags, remove, update } from "./controllers/PostController.js";
+import { create, getAll, getLastTags, getOne, getPopular,  remove, update } from "./controllers/PostController.js";
 import {validationErrors, checkAuth} from "./utils/index.js";
 import app from "./server.js";
 
@@ -49,7 +49,7 @@ app.get('/tags', getLastTags);
 app.get('/posts', getAll);
 app.get('/posts/popular', checkAuth, getPopular);
 app.get('/posts/tags', getLastTags);
-app.get('/posts/tags/:tag', checkAuth, getSelectedTags);
+
 
 app.get('/posts/:id', getOne);
 app.post('/posts', checkAuth, postCreateValidation, validationErrors, create);
