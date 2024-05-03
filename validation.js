@@ -17,4 +17,10 @@ export const postCreateValidation = [
   body("text", "Enter a text of the article").isLength({min: 3}).isString(),
   body("tags", "Incorrect tag format").optional().isString(),
   body("imageURL", "Incorrect image link").optional().isString(),
+
+];
+
+export const commentValidation = [
+  body('user', 'Invalid user ID').isMongoId(),
+  body('text', 'Comment must have content').isLength({ min: 1 }).isString(),
 ];

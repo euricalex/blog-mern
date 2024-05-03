@@ -77,3 +77,13 @@ export const getMe = async (req, res) => {
   }
   // Этот запрос будет говорить авторизован ли я или нет и позволит показать информацию о своем профиле в  React приложении
 };
+export const getUsersByIds = async (req, res) => {
+  try {
+    const { userIds } = req.body;
+    const users = await UserShema.find({ _id: { $in: userIds } });
+    res.json(users);
+  } catch (error) {
+    console.error("Error fetching users by ids:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

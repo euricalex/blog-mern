@@ -19,6 +19,19 @@ const PostShema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    comments: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+          required: true
+        },
+        text: {
+          type: String,
+        },
+        // Другие поля комментария, если необходимо
+      }
+    ],
     user: {
         type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

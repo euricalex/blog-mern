@@ -3,11 +3,12 @@ import dotenv from 'dotenv';
 import mongoose from "mongoose";
 import multer from "multer";
 import cors from 'cors';
-import { registerValidation, loginValidation, postCreateValidation } from "./validation.js";
-import { getMe, login, register } from "./controllers/UserController.js";
-import { create, getAll, getLastTags, getOne, getPopular,  remove, update } from "./controllers/PostController.js";
+import { registerValidation, loginValidation, postCreateValidation, commentValidation } from "./validation.js";
+import { getMe, getUsersByIds, login, register } from "./controllers/UserController.js";
+import { create,  createComments,  getAll, getCommentsByPostId, getLastTags, getOne, getPopular,  remove, removeComment, update } from "./controllers/PostController.js";
 import {validationErrors, checkAuth} from "./utils/index.js";
 import app from "./server.js";
+
 
 dotenv.config();
 const URL = process.env.URL;
@@ -52,8 +53,14 @@ app.get('/posts/tags', getLastTags);
 
 
 app.get('/posts/:id', getOne);
+app.get('/posts/:id/comments', checkAuth, commentValidation,  getCommentsByPostId );
+app.post('/users/getByIds', checkAuth,  getUsersByIds );
+
 app.post('/posts', checkAuth, postCreateValidation, validationErrors, create);
+app.post('/posts/:id/comments', checkAuth, commentValidation,   createComments );
+
 app.delete('/posts/:id', checkAuth,  remove);
+app.delete('/posts/:postId/comments/:commentId',  checkAuth, commentValidation, removeComment)
 app.patch('/posts/:id', checkAuth, postCreateValidation, validationErrors, update);
 app.post('/upload', checkAuth, upload.single('image'), (req, res)=> {
     res.json({

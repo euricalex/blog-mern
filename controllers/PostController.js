@@ -1,3 +1,4 @@
+import Post from "../modules/Post.js";
 import PostShema from "../modules/Post.js";
 
 
@@ -53,6 +54,10 @@ export const getOne = async (req, res) => {
 };
 
 
+
+
+
+
 export const create = async (req, res) => {
   try {
     const doc = new PostShema({
@@ -70,6 +75,48 @@ export const create = async (req, res) => {
     res.status(500).json({ message: "An article is not created" });
   }
 };
+
+export const createComments = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const { text } = req.body;
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const comment = {
+      user: req.userId,
+      text: text,
+    };
+
+    post.comments.push(comment);
+    await post.save();
+
+    res.json({ success: true, comment });
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    res.status(500).json({ message: "Failed to add comment" });
+  }
+};
+
+export const getCommentsByPostId = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    res.json(post.comments);
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    res.status(500).json({ message: "Failed to fetch comments" });
+  }
+};
+
 
 export const update = async (req, res) => {
     try {
@@ -114,6 +161,31 @@ export const update = async (req, res) => {
       res.status(500).json({
         message: "Не удалось удалить статью.",
       });
+    }
+  };
+
+  export const removeComment = async (req, res) => {
+    try {
+      const postId = req.params.postId; // Получаем идентификатор статьи из параметров маршрута
+      const commentId = req.params.commentId; // Получаем идентификатор комментария из параметров маршрута
+  
+      const post = await PostShema.findById(postId); // Находим статью по идентификатору
+  
+      if (!post) {
+        // Если статья не найдена, возвращаем сообщение об ошибке
+        return res.status(404).json({ message: "Post not found" });
+      }
+  
+      
+     post.comments = post.comments.filter((comment) => comment._id.toString() !== commentId);
+
+  
+      await post.save(); 
+  
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error removing comment:", error);
+      res.status(500).json({ message: "Failed to remove comment" });
     }
   };
   
